@@ -14,7 +14,7 @@ jobs:
       - name: ${{ github.event.client_payload.sha }}
         run: echo "${{ github.event.client_payload.sha }}"
       - name: Create techdocs
-        uses: department-of-veterans-affairs/lighthouse-github-actions/.github/actions/techdocs@main
+        uses: zaslow/lighthouse-github-actions/.github/actions/techdocs@main
         with:
           kubeconfig: ${{ secrets.KUBE_CONFIG }}
           kube_namespace: ${{ secrets.KUBE_NAMESPACE }}
