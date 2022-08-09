@@ -25,7 +25,8 @@ runs:
       id: get_status
       uses: stinkyfingers/cross-repo-dispatch@52c5ff3cc7277612c058d932896ac665f77ec249
       with:
-        owner: "department-of-veterans-affairs"
+        # owner: "department-of-veterans-affairs"
+        owner: zaslow
         repo: "lighthouse-github-actions"
         ref: ${{ github.ref }}
         pat: ${{ inputs.token }}
