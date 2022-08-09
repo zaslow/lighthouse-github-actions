@@ -53,65 +53,67 @@ runs:
       with:
         repository: ${{ inputs.repository }}
         token: ${{ inputs.token }}
-    - run: ls -aR
+    - run: |
+        pwd
+        ls -aR
       shell: bash
-    - name: Set K8s context
-      uses: azure/k8s-set-context@v1
-      with:
-        method: kubeconfig
-        kubeconfig: ${{ inputs.kubeconfig }}
-    - name: Set kube namespace
-      run: kubectl config set-context --current --namespace=${{ inputs.kube_namespace }}
-      shell: bash
-    - name: Get entity triplet
-      id: entity
-      env:
-        BASE_PATH: ${{ github.workspace }}
-        FILE: ${{ inputs.descriptor-file }}
-        KIND: ${{ inputs.kind }}
-        NAME: ${{ inputs.name }}
-      run: /bin/bash ${{ github.workspace }}/lhga/scripts/entity-triplet.sh
-      shell: bash
-    - name: Setup default branch
-      run: |
-        branch=$(curl \
-        -H "Accept: application/vnd.github+json" \
-        -H "Authorization: token ${{ inputs.token }}" \
-        https://api.github.com/repos/${{ inputs.repository }} | jq -r '.default_branch')
-        echo "branch=${branch}" >> $GITHUB_ENV
-      shell: bash
-    - name: Validating Techdocs Location for Catalog Entity
-      run: |
-        if [[ "$namespace" == "null" ]]; then
-          echo "Error: cannot create Techdocs with this Entity's namespace. Please add a valid namespace for the Entity."
-        fi
-        if [[ "$kind" == "null" ]]; then
-          echo "Error: cannot create Techdocs with this Entity's Kind. Please add a valid Kind for the Entity."
-        fi
-        if [[ "$name" == "null" ]]; then
-          echo "Error: cannot create Techdocs with this Entity's Name. Please add a valid Name for the Entity."
-        fi
-        echo "Entity's Techdocs Location: ${namespace}/${kind}/${name}"
-      shell: bash
-    - name: Create Dockerconfigjson
-      run: ${{ github.workspace }}/lhga/scripts/create-dockerconfigjson.sh "${{ inputs.repository }}"
-      env:
-        GITHUB_TOKEN: ${{ inputs.PAT }}
-        GITHUB_USER: ${{ github.repository_owner }}
-      shell: bash
-    - name: Create techdocs Job
-      run: >
-        ${{ github.workspace }}/lhga/scripts/create-techdocs-job.sh
-        "${{ inputs.serviceAccountName }}"
-        "${{ inputs.repository }}"
-        "$namespace"
-        "$kind"
-        "$name"
-      env:
-        GITHUB_TOKEN: ${{ inputs.token }}
-        GITHUB_USER: ${{ inputs.username }}
-        S3_BUCKET_NAME: ${{ inputs.AWSBucketName }}
-      shell: bash
-    - name: Techdocs Job status
-      run: ${{ github.workspace }}/lighthouse-github-actions/scripts/techdocs-job-status.sh "${{ inputs.repository }}"
-      shell: bash
+    # - name: Set K8s context
+    #   uses: azure/k8s-set-context@v1
+    #   with:
+    #     method: kubeconfig
+    #     kubeconfig: ${{ inputs.kubeconfig }}
+    # - name: Set kube namespace
+    #   run: kubectl config set-context --current --namespace=${{ inputs.kube_namespace }}
+    #   shell: bash
+    # - name: Get entity triplet
+    #   id: entity
+    #   env:
+    #     BASE_PATH: ${{ github.workspace }}
+    #     FILE: ${{ inputs.descriptor-file }}
+    #     KIND: ${{ inputs.kind }}
+    #     NAME: ${{ inputs.name }}
+    #   run: /bin/bash ${{ github.workspace }}/lhga/scripts/entity-triplet.sh
+    #   shell: bash
+    # - name: Setup default branch
+    #   run: |
+    #     branch=$(curl \
+    #     -H "Accept: application/vnd.github+json" \
+    #     -H "Authorization: token ${{ inputs.token }}" \
+    #     https://api.github.com/repos/${{ inputs.repository }} | jq -r '.default_branch')
+    #     echo "branch=${branch}" >> $GITHUB_ENV
+    #   shell: bash
+    # - name: Validating Techdocs Location for Catalog Entity
+    #   run: |
+    #     if [[ "$namespace" == "null" ]]; then
+    #       echo "Error: cannot create Techdocs with this Entity's namespace. Please add a valid namespace for the Entity."
+    #     fi
+    #     if [[ "$kind" == "null" ]]; then
+    #       echo "Error: cannot create Techdocs with this Entity's Kind. Please add a valid Kind for the Entity."
+    #     fi
+    #     if [[ "$name" == "null" ]]; then
+    #       echo "Error: cannot create Techdocs with this Entity's Name. Please add a valid Name for the Entity."
+    #     fi
+    #     echo "Entity's Techdocs Location: ${namespace}/${kind}/${name}"
+    #   shell: bash
+    # - name: Create Dockerconfigjson
+    #   run: ${{ github.workspace }}/lhga/scripts/create-dockerconfigjson.sh "${{ inputs.repository }}"
+    #   env:
+    #     GITHUB_TOKEN: ${{ inputs.PAT }}
+    #     GITHUB_USER: ${{ github.repository_owner }}
+    #   shell: bash
+    # - name: Create techdocs Job
+    #   run: >
+    #     ${{ github.workspace }}/lhga/scripts/create-techdocs-job.sh
+    #     "${{ inputs.serviceAccountName }}"
+    #     "${{ inputs.repository }}"
+    #     "$namespace"
+    #     "$kind"
+    #     "$name"
+    #   env:
+    #     GITHUB_TOKEN: ${{ inputs.token }}
+    #     GITHUB_USER: ${{ inputs.username }}
+    #     S3_BUCKET_NAME: ${{ inputs.AWSBucketName }}
+    #   shell: bash
+    # - name: Techdocs Job status
+    #   run: ${{ github.workspace }}/lighthouse-github-actions/scripts/techdocs-job-status.sh "${{ inputs.repository }}"
+    #   shell: bash

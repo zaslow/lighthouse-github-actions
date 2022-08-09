@@ -25,15 +25,14 @@ runs:
       id: get_status
       uses: stinkyfingers/cross-repo-dispatch@52c5ff3cc7277612c058d932896ac665f77ec249
       with:
-        # owner: "department-of-veterans-affairs"
         owner: zaslow
-        repo: "lighthouse-github-actions"
-        ref: ${{ github.ref }}
+        repo: lighthouse-github-actions
+        ref: refs/heads/main
         pat: ${{ inputs.token }}
-        user: ${{ github.repository_owner }}
+        user: zaslow
         sha: ${{ github.sha }}
-        event_type: "techdocs"
-        client_payload: '{ "sha": "${{ github.sha }}","repository": "${{ inputs.repository }}", "descriptor-file": "${{ inputs.descriptor-file }}", "namespace": "${{ inputs.namespace }}", "token": "${{ inputs.token }}" }'
+        event_type: techdocs
+        client_payload: '{ "sha": "${{ github.sha }}","repository": "${{ inputs.repository }}", "namespace": "${{ inputs.namespace }}", "token": "${{ inputs.token }}" }'
         workflow_status_timeout: 1200
     - name: Display Results
       run: |
