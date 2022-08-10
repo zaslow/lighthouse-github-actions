@@ -5,11 +5,6 @@ on:
 jobs:
   create-techdocs:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        environment: [Development, Production]
-    environment:
-      name: ${{ matrix.environment }}
     steps:
       - name: ${{ github.event.client_payload.sha }}
         run: echo "${{ github.event.client_payload.sha }}"
