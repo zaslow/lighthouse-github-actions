@@ -47,15 +47,18 @@ runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
-      with:
-        repository: ${{ inputs.repository }}
-        token: ${{ inputs.token }}
     - uses: actions/checkout@v3
       with:
-        path: lhga
-    - run: |
-        pwd
-        ls -aR
+        path: ${{ inputs.repository }}
+        repository: ${{ inputs.repository }}
+        token: ${{ inputs.token }}
+    - run: pwd
+      shell: bash
+    - run: ls -aR
+      shell: bash
+    - run: ls /tmp/git
+      shell: bash
+    - run: /bin/bash ${{ github.workspace }}/scripts/test-script.sh
       shell: bash
     # - name: Set K8s context
     #   uses: azure/k8s-set-context@v1
